@@ -258,7 +258,8 @@ function MortgageCalculator() {
 }
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name is required"),
+  firstName: z.string().trim().min(1, "First name is required"),
+  lastName: z.string().trim().min(1, "Last name is required"),
   email: z.string().email("Invalid email address"),
   phone: z.string().min(10, "Phone number is required"),
   message: z.string().min(10, "Message must be at least 10 characters")
@@ -277,11 +278,12 @@ export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: "", email: "", phone: "", message: "" }
+    defaultValues: { firstName: "", lastName: "", email: "", phone: "", message: "" }
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      const name = `${values.firstName} ${values.lastName}`.trim();
       const response = await fetch(GHL_WEBHOOK_URL, {
         method: "POST",
         headers: {
@@ -289,6 +291,7 @@ export default function HomePage() {
         },
         body: JSON.stringify({
           ...values,
+          name,
           source: "Home Financing Solution website",
           submittedAt: new Date().toISOString(),
         }),
@@ -686,17 +689,32 @@ export default function HomePage() {
                       <div className="grid md:grid-cols-2 gap-6">
                         <FormField
                           control={form.control}
-                          name="name"
+                          name="firstName"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Full Name</FormLabel>
+                              <FormLabel>First Name</FormLabel>
                               <FormControl>
-                                <Input data-testid="input-name" placeholder="Jane Doe" {...field} />
+                                <Input data-testid="input-first-name" placeholder="Jane" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
+                        <FormField
+                          control={form.control}
+                          name="lastName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Last Name</FormLabel>
+                              <FormControl>
+                                <Input data-testid="input-last-name" placeholder="Doe" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-6">
                         <FormField
                           control={form.control}
                           name="phone"
@@ -710,20 +728,20 @@ export default function HomePage() {
                             </FormItem>
                           )}
                         />
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email Address</FormLabel>
+                              <FormControl>
+                                <Input data-testid="input-email" placeholder="jane@example.com" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       </div>
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email Address</FormLabel>
-                            <FormControl>
-                              <Input data-testid="input-email" placeholder="jane@example.com" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
                       <FormField
                         control={form.control}
                         name="message"
