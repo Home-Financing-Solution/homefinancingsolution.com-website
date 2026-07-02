@@ -17,7 +17,7 @@ import TorontoSkylinePhoto from "@/components/TorontoSkylinePhoto";
 const publicAsset = (fileName: string) =>
   `${import.meta.env.BASE_URL}${fileName.replace(/^\//, "")}`;
 
-const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/FM0ved955XcwGFUi7wXt/webhook-trigger/b5435a86-6b2a-4192-ab2d-63c73e7837bf";
+const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/FM0ved955XcwGFUi7wXt/webhook-trigger/d374115a-5a35-4f6f-81e4-623576db0613";
 const HFS_LOGO_URL = publicAsset("hfs-logo.png");
 const PINEAPPLE_LOGO_URL = publicAsset("pineapple-logo.png");
 
